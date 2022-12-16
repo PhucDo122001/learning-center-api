@@ -17,9 +17,14 @@ const dataSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    studentNumber: {
+    maxStudent: {
         type: Number,
-    }
+        require: true,
+    },
+    currentStudent: {
+        type: [String],
+    },
+
 
 
 })

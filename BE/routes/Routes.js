@@ -14,22 +14,23 @@ router.post('/post', async (req, res) => {
         name: req.body.name,
         lecture: req.body.lecture,
         dateStart: req.body.dateStart,
-        studentNumber: 0,
+        maxStudent: req.body.maxStudent,
+        currentStudent: [],
     })
 
     try {
         const dataToSave = await data.save();
+        
         res.json({status: 200 , message: "Success!"});
     }
     catch (error) {
         res.status(400).json({message: error.message})
     }
 })
-//Get all Method
+//Get all Courses
 router.get('/get', async (req, res) => {
     try{
         const data = await ModelCourses.find();
-
         res.json(data)
     }
     catch(error){
@@ -37,18 +38,18 @@ router.get('/get', async (req, res) => {
     }
 })
 
-//Get by ID Method
+//Get by ID one courses
 router.get('/getOne/:id', async (req, res) => {
     try{
         const data = await ModelCourses.findById(req.params.id);
         res.json(data)
     }
     catch(error){
-        res.status(500).json({message: error.message})
+        res.json({status: 200,message: error.message})
     }
 })
 
-//Update by ID Method
+//Update by ID update Courses
 router.patch('/update/:id', async (req, res) => {
     try {
         const id = req.params.id;
@@ -59,14 +60,44 @@ router.patch('/update/:id', async (req, res) => {
             id, updatedData, options
         )
 
-        res.send(result)
+        res.send({status: 200, message: "Update successfully"})
     }
     catch (error) {
-        res.status(400).json({ message: error.message })
+        res.json({status: 400, message: error.message })
     }
 })
 
-//Delete by ID Method
+//Update by ID update User
+router.patch('/updateUser/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updatedData = req.body;
+        const options = { new: true };
+
+        const result = await ModelUser.findByIdAndUpdate(
+            id, updatedData, options
+        )
+
+        res.send({status: 200, message: "Update successfully"})
+    }
+    catch (error) {
+        res.json({status: 400, message: error.message })
+    }
+})
+//Delete by ID delete user
+router.delete('/deleteCourse/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const data = await ModelCourses.findByIdAndDelete(id)
+        console.log(data);
+        res.json({status: 200 ,message: data.name})
+    }
+    catch (error) {
+        res.json({status: 400, message: error.message })
+    }
+})
+
+//Delete by ID delete user
 router.delete('/delete/:id', async (req, res) => {
     try {
         const id = req.params.id;
@@ -80,6 +111,9 @@ router.delete('/delete/:id', async (req, res) => {
 })
 
 
+
+
+
 router.post('/signup', async (req, res) => {
     console.log(req.body);
     const date = new Date()
@@ -89,9 +123,9 @@ router.post('/signup', async (req, res) => {
         name: req.body.name,
         password: passwordHash,
         email: req.body.email,
-        role: "Customer",
+        role: "Thành Viên",
         dateCreate: `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`,
-        numberCart: []
+        numberCourse: []
 
     })
     console.log(data2)

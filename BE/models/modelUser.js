@@ -16,14 +16,14 @@ const dataSchema = new mongoose.Schema({
     role: {
         type: String
     },
-    urlAvatar: {
+    urlImg: {
         type: String
     },
     dateCreate: {
         type: String
     },
     numberCourses: {
-        type: [String]
+        type: [Object]
     }
 
 })
